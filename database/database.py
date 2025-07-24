@@ -28,3 +28,16 @@ def remove_forced_channel(channel_id: str):
 
 def get_forced_channels():
     return list(forced_channels)
+
+
+# Admin check
+admin_users = set()
+
+def add_admin(user_id: int):
+    admin_users.add(user_id)
+
+def remove_admin(user_id: int):
+    admin_users.discard(user_id)
+
+def is_admin(user_id: int) -> bool:
+    return user_id in admin_users
