@@ -36,31 +36,3 @@ async def list_admins_command(client, message: Message):
         return await message.reply_text("No admins found.")
     text = "<b>Admin User IDs:</b>\n" + "\n".join([f"<code>{uid}</code>" for uid in admins])
     await message.reply_text(text)
-
-
-from pyrogram import filters
-from pyrogram.types import Message
-from database.database import add_forced_channel, remove_forced_channel, get_forced_channels
-
-@bot.on_message(filters.command("addfsub") & filters.user(ADMINS))
-async def add_fsub(_, message: Message):
-    if len(message.command) < 2:
-        return await message.reply("Usage: /addfsub <channel_id>")
-    cid = message.command[1]
-    add_forced_channel(cid)
-    await message.reply(f"✅ Added `{cid}` to forced sub list.")
-
-@bot.on_message(filters.command("removefsub") & filters.user(ADMINS))
-async def remove_fsub(_, message: Message):
-    if len(message.command) < 2:
-        return await message.reply("Usage: /removefsub <channel_id>")
-    cid = message.command[1]
-    remove_forced_channel(cid)
-    await message.reply(f"🗑 Removed `{cid}` from forced sub list.")
-
-@bot.on_message(filters.command("listfsub") & filters.user(ADMINS))
-async def list_fsub(_, message: Message):
-    cids = get_forced_channels()
-    if not cids:
-        return await message.reply("No forced sub channels.")
-    await message.reply("**Forced Subscription Channels:**\n" + "\n".join(f"`{cid}`" for cid in cids))
